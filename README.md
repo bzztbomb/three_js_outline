@@ -1,22 +1,3 @@
-# Typescript Three.js Webpack Starter
+An implementation of Jump Flood Based Object Outlining described [here](https://medium.com/@bgolus/the-quest-for-very-wide-outlines-ba82ed442cd9) by Ben Golus for Three.JS
 
-- Typescript support.
-- Webpack
-- Html plugin
-
-## Usage
-
-### Install Typscript
-
-```
-npm install typescript -g
-```
-
-### Start
-
-```
-$ git clone https://github.com/pinqy520/three-typescript-starter.git
-$ cd three-typescript-starter
-$ npm install # or yarn
-$ npm start
-```
+Needs some fun demos.

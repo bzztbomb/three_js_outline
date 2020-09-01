@@ -1,7 +1,7 @@
 {
-  "name": "three-typescript-starter",
+  "name": "three_js_outline",
   "version": "1.0.0",
-  "description": "three.js + typescript",
+  "description": "Jump Flood Based Object Outlining",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pinqy520/three-typescript-starter.git"
+    "url": "git+https://github.com/bzztbomb/three_js_outline.git"
   },
   "keywords": [],
-  "author": "Huang Qi",
+  "author": "Brian Richardson (bzztbomb)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pinqy520/three-typescript-starter/issues"
+    "url": "https://github.com/bzztbomb/three_js_outline/issues"
   },
-  "homepage": "https://github.com/pinqy520/three-typescript-starter#readme",
+  "homepage": "https://github.com/bzztbomb/three_js_outline/#readme",
   "devDependencies": {
     "awesome-typescript-loader": "latest",
     "css-loader": "latest",
@@ -30,6 +30,7 @@
     "webpack-dev-server": "latest"
   },
   "dependencies": {
-    "three": "latest"
+    "three": "latest",
+    "three_gpu_picking": "^1.0.0"
   }
 }

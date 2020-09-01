@@ -26,13 +26,6 @@ module.exports = {
         use: ['awesome-typescript-loader'],
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        loaders: [
-          'file-loader?hash=sha512&digest=hex&name=images/[hash].[ext]',
-          'image-webpack-loader?bypassOnDebug&optipng.optimizationLevel=7&gifsicle.interlaced=false',
-        ],
-      },
-      {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
