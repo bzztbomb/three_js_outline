@@ -20,8 +20,7 @@ Run the example by doing the following:
 
 ## Usage
 
-In the default setup, the Three.JS layer system is used to mark an object for outlining.  
-
+Setup
 ```
 import { JFAOutline } from 'three_js_outline';
 

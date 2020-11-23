@@ -1,6 +1,6 @@
 {
   "name": "three_js_outline",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Jump Flood Based Object Outlining",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
