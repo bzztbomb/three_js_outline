@@ -32,7 +32,6 @@
     "webpack-dev-server": "latest"
   },
   "dependencies": {
-    "three": "latest",
-    "three_gpu_picking": "^1.0.0"
+    "three": "latest"
   }
 }
