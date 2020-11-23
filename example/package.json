@@ -30,6 +30,7 @@
     "webpack-dev-server": "latest"
   },
   "dependencies": {
+    "dat.gui": "^0.7.7",
     "three": "latest",
     "three_gpu_picking": "^1.0.0"
   }

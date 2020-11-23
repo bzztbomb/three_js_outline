@@ -2,14 +2,14 @@
 // https://www.shadertoy.com/view/4syGWK
 // https://medium.com/@bgolus/the-quest-for-very-wide-outlines-ba82ed442cd9
 
-// TODO:
-// dat.gui with a couple of outlining variations
 import "./style.css";
 import * as THREE from "three";
-import { Vector2 } from "three";
+import { Vector2, Vector4, NormalBlending } from "three";
 import { GPUPicker } from 'three_gpu_picking';
-import { JFAOutline } from 'three_js_outline';
+import { JFAOutline, fullScreenPass } from 'three_js_outline';
 
+import * as dat from 'dat.gui';
+ 
 const SELECTED_LAYER = 1;
 
 // create the scene
@@ -69,6 +69,22 @@ const gpuPicker = new GPUPicker(THREE, renderer, scene, camera, idFromObject);
 renderer.domElement.addEventListener('mouseup', onMouseUp);
 renderer.domElement.addEventListener('touchend', onMouseUp);
 
+const outlineUniforms = {
+  threshLow: 1,
+  threshHigh: 200,
+  outlineColor: new Vector4(1.0,0.0,0.0),
+};
+const outlineHelper = {
+  outlineColor: [1.0, 0.0, 0.0],
+  animateOutline: false,
+}
+
+const gui = new dat.GUI();
+gui.add(outlineUniforms, 'threshLow', 0, 1000);
+gui.add(outlineUniforms, 'threshHigh', 0, 1000);
+gui.addColor(outlineHelper, 'outlineColor');
+gui.add(outlineHelper, 'animateOutline');
+
 function animate(): void {
   requestAnimationFrame(animate);
   render();
@@ -77,10 +93,13 @@ function animate(): void {
 var toPick;
 
 function render(): void {
-  const timer = 0.0 * Date.now();
-  box.position.y = 1.0 * Math.sin(timer);
-  box.position.x = 1.3 * Math.sin(timer * 2.3);
+  const timer = 0.002 * Date.now();
   box.rotation.x += 0.01;
+
+  if (outlineHelper.animateOutline) {
+    outlineUniforms.threshLow = 15 * Math.sin(timer) + 15;
+    outlineUniforms.threshHigh = 20 + (100 * Math.sin(timer) + 100);
+  }
   
   renderer.setRenderTarget(null);
   renderer.render(scene, camera);
@@ -98,7 +117,8 @@ function render(): void {
     toPick = undefined;
   }
 
-  jfaOutline.outline(renderer, scene, camera, targets, iResolution, SELECTED_LAYER);
+  outlineUniforms.outlineColor.set(outlineHelper.outlineColor[0], outlineHelper.outlineColor[1], outlineHelper.outlineColor[2], 1.0);
+  jfaOutline.outline(renderer, scene, camera, targets, iResolution, SELECTED_LAYER, outlineUniforms);
 }
 
 function onMouseUp(ev) {
@@ -118,3 +138,40 @@ function idFromObject(obj) {
 }
 
 animate();
+
+const fancyOutline = fullScreenPass(
+  `
+uniform sampler2D tex;
+uniform float threshLow;
+uniform float threshHigh;
+uniform vec4 outlineColor;
+
+void main() {
+  vec2 vUv = gl_FragCoord.xy / iResolution;
+  vec4 rgba = texture2D(tex, vUv);
+  vec2 coord = rgba.xy;
+  vec4 color = vec4(0.0);
+  if (rgba.a < 1.0) {
+    float dist = distance(coord, gl_FragCoord.xy);
+    if (dist >= threshLow && dist <= threshHigh) {
+      color = outlineColor;
+      color.a = clamp(threshHigh - dist, 0.0, 1.0);
+    }
+  }
+  gl_FragColor = color;  
+}
+`,
+  {
+    tex: { value: targets[0].texture },
+    iResolution: { value: iResolution },
+    threshLow: { value: 1.0 },
+    threshHigh: { value: 200.0 },
+    outlineColor: { value: new Vector4(1.0, 1.0, 0.0, 1.0) },
+  },
+  {
+    depthTest: false,
+    depthWrite: false,
+    blending: NormalBlending,
+    transparent: true,
+  }
+);
